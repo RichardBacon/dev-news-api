@@ -34,5 +34,25 @@ describe('/', () => {
       });
       return Promise.all(requests);
     });
+
+    describe('/users', () => {
+      describe('GET', () => {
+        test('status:200 | array of user objects', () => {
+          return request(app)
+            .get('/api/users')
+            .expect(200)
+            .then(({ body: { users } }) => {
+              users.forEach((user) => {
+                expect(user).toContainAllKeys([
+                  'username',
+                  'first_name',
+                  'last_name',
+                  'email',
+                ]);
+              });
+            });
+        });
+      });
+    });
   });
 });
