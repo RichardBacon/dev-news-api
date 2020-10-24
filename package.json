@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "dev-server": "nodemon src/listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
