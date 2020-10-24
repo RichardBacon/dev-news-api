@@ -198,5 +198,46 @@ describe('/', () => {
         });
       });
     });
+
+    describe('/:username', () => {
+      test('invalid methods | status:405 | msg: "method not allowed"', () => {
+        const invalidMethods = ['post', 'patch', 'put', 'delete'];
+        const requests = invalidMethods.map((method) => {
+          return request(app)
+            [method]('/api/users/username')
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+
+        return Promise.all(requests);
+      });
+
+      describe('GET', () => {
+        test('valid request | status:200 | user object', () => {
+          return request(app)
+            .get('/api/users/username1')
+            .expect(200)
+            .then(({ body: { user } }) => {
+              expect(user).toEqual({
+                username: 'username1',
+                first_name: 'first_name1',
+                last_name: 'last_name1',
+                email: 'first_name1.last_name1@email.com',
+              });
+            });
+        });
+
+        test('non-existent username | status:404 | msg: "user not found"', () => {
+          return request(app)
+            .get('/api/users/non_existent')
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('user not found');
+            });
+        });
+      });
+    });
   });
 });

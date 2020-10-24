@@ -22,8 +22,25 @@ const insertUser = ({ username, first_name, last_name, email }) => {
       email,
     })
     .into('users')
-    .returning(['username', 'first_name', 'last_name', 'email'])
+    .returning('*')
     .then((users) => {
+      return users[0];
+    });
+};
+
+const selectUserByUsername = ({ username }) => {
+  return connection
+    .select('*')
+    .from('users')
+    .where('username', username)
+    .then((users) => {
+      if (users.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: 'user not found',
+        });
+      }
+
       return users[0];
     });
 };
@@ -31,4 +48,5 @@ const insertUser = ({ username, first_name, last_name, email }) => {
 module.exports = {
   selectUsers,
   insertUser,
+  selectUserByUsername,
 };
