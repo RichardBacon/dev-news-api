@@ -37,7 +37,7 @@ describe('/', () => {
 
     describe('/users', () => {
       describe('GET', () => {
-        test('status:200 | array of user objects', () => {
+        test('valid request | status:200 | array of user objects', () => {
           return request(app)
             .get('/api/users')
             .expect(200)
@@ -51,6 +51,150 @@ describe('/', () => {
                 ]);
               });
             });
+        });
+      });
+
+      describe('POST', () => {
+        describe('valid request body', () => {
+          test('status:201 | user object', () => {
+            return request(app)
+              .post('/api/users')
+              .send({
+                username: 'testusername',
+                first_name: 'testfirst',
+                last_name: 'testlast',
+                email: 'test@email.com',
+              })
+              .expect(201)
+              .then(({ body: { user } }) => {
+                expect(user).toEqual({
+                  username: 'testusername',
+                  first_name: 'testfirst',
+                  last_name: 'testlast',
+                  email: 'test@email.com',
+                });
+              });
+          });
+
+          test('superfluous keys | status:201 | user object', () => {
+            return request(app)
+              .post('/api/users')
+              .send({
+                superfluous_key1: 'superfluous',
+                username: 'testusername',
+                superfluous_key2: 'superfluous',
+                first_name: 'testfirst',
+                superfluous_key3: 'superfluous',
+                last_name: 'testlast',
+                superfluous_key4: 'superfluous',
+                email: 'test@email.com',
+                superfluous_key5: 'superfluous',
+              })
+              .expect(201)
+              .then(({ body: { user } }) => {
+                expect(user).toEqual({
+                  username: 'testusername',
+                  first_name: 'testfirst',
+                  last_name: 'testlast',
+                  email: 'test@email.com',
+                });
+              });
+          });
+        });
+
+        describe('invalid request body', () => {
+          test('missing key | status:400 | msg: "bad request"', () => {
+            const invalidReqBodies = [
+              {
+                first_name: 'testfirst',
+                last_name: 'testlast',
+                email: 'test@email.com',
+              },
+              {
+                username: 'testusername',
+                last_name: 'testlast',
+                email: 'test@email.com',
+              },
+              {
+                username: 'testusername',
+                first_name: 'testfirst',
+                email: 'test@email.com',
+              },
+              {
+                username: 'testusername',
+                first_name: 'testfirst',
+                last_name: 'testlast',
+              },
+            ];
+
+            const requests = invalidReqBodies.map((invalidReqBody) => {
+              return request(app)
+                .post('/api/users')
+                .send(invalidReqBody)
+                .expect(400)
+                .then(({ body: { msg } }) => {
+                  expect(msg).toBe('bad request');
+                });
+            });
+
+            return Promise.all(requests);
+          });
+
+          test('misspelt key | status:400 | msg: "bad request"', () => {
+            const invalidReqBodies = [
+              {
+                usrname: 'testusername',
+                first_name: 'testfirst',
+                last_name: 'testlast',
+                email: 'test@email.com',
+              },
+              {
+                username: 'testusername',
+                firstname: 'testfirst',
+                last_name: 'testlast',
+                email: 'test@email.com',
+              },
+              {
+                username: 'testusername',
+                first_name: 'testfirst',
+                lastName: 'testlast',
+                email: 'test@email.com',
+              },
+              {
+                username: 'testusername',
+                first_name: 'testfirst',
+                last_name: 'testlast',
+                emails: 'test@email.com',
+              },
+            ];
+
+            const requests = invalidReqBodies.map((invalidReqBody) => {
+              return request(app)
+                .post('/api/users')
+                .send(invalidReqBody)
+                .expect(400)
+                .then(({ body: { msg } }) => {
+                  expect(msg).toBe('bad request');
+                });
+            });
+
+            return Promise.all(requests);
+          });
+
+          test('existing username | status:400 | msg: "bad request"', () => {
+            return request(app)
+              .post('/api/users')
+              .send({
+                username: 'username1',
+                first_name: 'first_name1',
+                last_name: 'last_name1',
+                email: 'first_name1.last_name1@email.com',
+              })
+              .expect(400)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe('bad request');
+              });
+          });
         });
       });
     });
