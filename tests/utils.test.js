@@ -1,4 +1,4 @@
-const { formatDates } = require('./utils');
+const { formatDates } = require('../db/utils/utils');
 
 describe('formatDates', () => {
   describe('formats the given key into a valid Date object', () => {

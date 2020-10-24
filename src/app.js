@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { apiRouter } = require('./routes/api.router');
 const {
   send404,
   handlePSQLErrors,
@@ -12,10 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.status(200).send('app running');
-});
-
+app.use('/api', apiRouter);
 app.use(send404);
 
 app.use(handlePSQLErrors);
