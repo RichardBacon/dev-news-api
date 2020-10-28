@@ -1,6 +1,8 @@
 const {
   updateCommentById,
   delCommentById,
+  selectCommentsByPostId,
+  countComments,
 } = require('../models/comments.model');
 
 const patchCommentById = (req, res, next) => {
@@ -19,7 +21,21 @@ const deleteCommentById = (req, res, next) => {
     .catch(next);
 };
 
+const getCommentsByPostId = (req, res, next) => {
+  const queries = [
+    selectCommentsByPostId(req.params, req.query),
+    countComments(req.params),
+  ];
+
+  Promise.all(queries)
+    .then(([comments, total_count]) => {
+      res.status(200).send({ comments, ...total_count });
+    })
+    .catch(next);
+};
+
 module.exports = {
   patchCommentById,
   deleteCommentById,
+  getCommentsByPostId,
 };

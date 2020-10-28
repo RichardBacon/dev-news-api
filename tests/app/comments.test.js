@@ -164,3 +164,192 @@ describe('/api/comments/:comment_id', () => {
     });
   });
 });
+
+describe('/api/posts/:post_id/comments', () => {
+  test('invalid methods | status:405 - msg: "method not allowed"', () => {
+    const invalidMethods = ['patch', 'put', 'delete'];
+    const requests = invalidMethods.map((method) => {
+      return request(app)
+        [method]('/api/posts/1/comments')
+        .expect(405)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('method not allowed');
+        });
+    });
+    return Promise.all(requests);
+  });
+
+  describe('GET comments', () => {
+    test('valid request | status:200 - array of comment objects', () => {
+      return request(app)
+        .get('/api/posts/1/comments')
+        .expect(200)
+        .then(({ body: { comments } }) => {
+          comments.forEach((comment) => {
+            expect(comment).toContainAllKeys([
+              'comment_id',
+              'post_id',
+              'votes',
+              'created_at',
+              'created_by',
+              'body',
+            ]);
+          });
+        });
+    });
+
+    test('total_count property - total number of comments', () => {
+      return request(app)
+        .get('/api/posts/1/comments')
+        .expect(200)
+        .then(({ body: { total_count } }) => {
+          expect(total_count).toBe('20');
+        });
+    });
+
+    test('post has no comments | status:200 - empty array', () => {
+      return request(app)
+        .get('/api/posts/6/comments')
+        .expect(200)
+        .then(({ body: { comments } }) => {
+          expect(comments).toEqual([]);
+        });
+    });
+
+    describe('GET comments - queries', () => {
+      describe('sort_by query', () => {
+        test('valid sort_by query | status:200 - sorted by [sort_by]', () => {
+          const validSortByQueries = [
+            'comment_id',
+            'post_id',
+            'votes',
+            'created_at',
+            'created_by',
+            'body',
+          ];
+
+          const requests = validSortByQueries.map((query) => {
+            return request(app)
+              .get(`/api/posts/1/comments?sort_by=${query}`)
+              .expect(200)
+              .then(({ body: { comments } }) => {
+                expect(comments).toBeSortedBy(query, { descending: true });
+              });
+          });
+
+          return Promise.all(requests);
+        });
+
+        test('invalid sort_by query | status:400 - msg: "bad request"', () => {
+          return request(app)
+            .get('/api/posts/1/comments?sort_by=invalid')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+      });
+
+      describe('order query', () => {
+        test('valid order query | status:200 - sorted in [order]', () => {
+          const validOrderQueries = ['asc', 'desc'];
+
+          const requests = validOrderQueries.map((query) => {
+            return request(app)
+              .get(`/api/posts/1/comments?order=${query}`)
+              .expect(200)
+              .then(({ body: { comments } }) => {
+                expect(comments).toBeSortedBy('created_at', {
+                  descending: query === 'desc',
+                });
+              });
+          });
+
+          return Promise.all(requests);
+        });
+
+        test('invalid order query | status:400 - msg: "bad request"', () => {
+          return request(app)
+            .get('/api/posts/1/comments?order=invalidQuery')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+      });
+
+      describe('limit query', () => {
+        test('valid limit query | status:200 - no. of comments limited to [limit]', () => {
+          const validLimitQueries = [1, 10, 20, 21];
+
+          const requests = validLimitQueries.map((query) => {
+            return request(app)
+              .get(`/api/posts/1/comments?limit=${query}`)
+              .expect(200)
+              .then(({ body: { comments } }) => {
+                expect(comments.length).toBe(query <= 20 ? query : 20);
+              });
+          });
+
+          return Promise.all(requests);
+        });
+
+        test('invalid limit query - not a number | status:400 - msg: "bad request"', () => {
+          return request(app)
+            .get('/api/posts/1/comments?limit=notanumber')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+
+        test('invalid limit query - 0 | status:400 - msg: "bad request"', () => {
+          return request(app)
+            .get('/api/posts/1/comments?limit=0')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+      });
+
+      describe('page query', () => {
+        test('valid page query | status:200 - start page set correctly', () => {
+          return request(app)
+            .get('/api/posts/1/comments?page=2')
+            .expect(200)
+            .then(({ body: { comments } }) => {
+              expect(comments[0].comment_id).toBe(10);
+            });
+        });
+
+        test('valid page query and valid limit query | status:200 - start page set correctly', () => {
+          return request(app)
+            .get('/api/posts/1/comments?limit=5&page=3')
+            .expect(200)
+            .then(({ body: { comments } }) => {
+              expect(comments[0].comment_id).toBe(10);
+            });
+        });
+
+        test('invalid page query - not a number | status:400 - msg: "bad request"', () => {
+          return request(app)
+            .get('/api/posts/1/comments?page=notanumber')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+
+        test('invalid page query - 0 | status:400 - msg: "bad request"', () => {
+          return request(app)
+            .get('/api/posts/1/comments?page=0')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+      });
+    });
+  });
+});
