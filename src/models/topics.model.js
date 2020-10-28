@@ -6,6 +6,23 @@ const selectTopics = () => {
   return connection.select('*').from('topics');
 };
 
+const selectTopicByTitle = ({ topic }) => {
+  return connection
+    .select('*')
+    .from('topics')
+    .where('title', topic)
+    .then((topics) => {
+      if (topics.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: 'topic not found',
+        });
+      }
+
+      return topics[0];
+    });
+};
+
 const insertTopic = ({ title, description, username }) => {
   if (!title || !description || !username) {
     return Promise.reject({
@@ -38,5 +55,6 @@ const insertTopic = ({ title, description, username }) => {
 
 module.exports = {
   selectTopics,
+  selectTopicByTitle,
   insertTopic,
 };
