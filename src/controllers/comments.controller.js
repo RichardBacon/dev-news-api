@@ -2,6 +2,7 @@ const {
   updateCommentById,
   delCommentById,
   selectCommentsByPostId,
+  insertCommentByPostId,
   countComments,
 } = require('../models/comments.model');
 
@@ -34,8 +35,17 @@ const getCommentsByPostId = (req, res, next) => {
     .catch(next);
 };
 
+const postCommentByPostId = (req, res, next) => {
+  insertCommentByPostId(req.params, req.body)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
 module.exports = {
   patchCommentById,
   deleteCommentById,
   getCommentsByPostId,
+  postCommentByPostId,
 };
