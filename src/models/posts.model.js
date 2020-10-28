@@ -1,5 +1,8 @@
 const connection = require('../../db/connection');
 
+const { selectTopicByTitle } = require('./topics.model');
+const { selectUserByUsername } = require('./users.model');
+
 const selectPosts = ({
   sort_by = 'created_at',
   order = 'desc',
@@ -64,7 +67,47 @@ const countPosts = ({ created_by, topic }) => {
     });
 };
 
+const insertPost = ({ username, title, body, topic }) => {
+  if (!username || !title || !body || !topic) {
+    return Promise.reject({
+      status: 400,
+      msg: 'bad request',
+    });
+  }
+
+  return selectTopicByTitle({ topic })
+    .catch(() => {
+      return Promise.reject({
+        status: 422,
+        msg: 'topic not found',
+      });
+    })
+    .then(() => {
+      return selectUserByUsername({ username }).catch(() => {
+        return Promise.reject({
+          status: 422,
+          msg: 'user not found',
+        });
+      });
+    })
+    .then(() => {
+      return connection
+        .insert({
+          title,
+          body,
+          created_by: username,
+          topic,
+        })
+        .into('posts')
+        .returning(['*']);
+    })
+    .then((posts) => {
+      return posts[0];
+    });
+};
+
 module.exports = {
   selectPosts,
   countPosts,
+  insertPost,
 };

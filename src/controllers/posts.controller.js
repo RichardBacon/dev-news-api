@@ -1,4 +1,8 @@
-const { selectPosts, countPosts } = require('../models/posts.model');
+const {
+  selectPosts,
+  countPosts,
+  insertPost,
+} = require('../models/posts.model');
 
 const { selectUserByUsername } = require('../models/users.model');
 
@@ -22,6 +26,15 @@ const getPosts = (req, res, next) => {
     .catch(next);
 };
 
+const postPost = (req, res, next) => {
+  insertPost(req.body)
+    .then((post) => {
+      res.status(201).send({ post });
+    })
+    .catch(next);
+};
+
 module.exports = {
   getPosts,
+  postPost,
 };
