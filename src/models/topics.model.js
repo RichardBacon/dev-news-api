@@ -32,12 +32,6 @@ const insertTopic = ({ title, description, username }) => {
   }
 
   return selectUserByUsername({ username })
-    .catch(() => {
-      return Promise.reject({
-        status: 422,
-        msg: 'user not found',
-      });
-    })
     .then(() => {
       return connection
         .insert({
@@ -50,6 +44,12 @@ const insertTopic = ({ title, description, username }) => {
     })
     .then((topics) => {
       return topics[0];
+    })
+    .catch(() => {
+      return Promise.reject({
+        status: 422,
+        msg: 'user not found',
+      });
     });
 };
 

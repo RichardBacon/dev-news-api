@@ -76,19 +76,8 @@ const insertPost = ({ username, title, body, topic }) => {
   }
 
   return selectTopicByTitle({ topic })
-    .catch(() => {
-      return Promise.reject({
-        status: 422,
-        msg: 'topic not found',
-      });
-    })
     .then(() => {
-      return selectUserByUsername({ username }).catch(() => {
-        return Promise.reject({
-          status: 422,
-          msg: 'user not found',
-        });
-      });
+      return selectUserByUsername({ username });
     })
     .then(() => {
       return connection
@@ -103,6 +92,12 @@ const insertPost = ({ username, title, body, topic }) => {
     })
     .then((posts) => {
       return posts[0];
+    })
+    .catch((err) => {
+      return Promise.reject({
+        status: 422,
+        msg: err.msg,
+      });
     });
 };
 
