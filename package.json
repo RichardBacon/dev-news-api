@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest --watch -i",
     "dev-server": "nodemon src/listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "migrate-make": "knex migrate:make",
