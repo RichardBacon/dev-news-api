@@ -403,7 +403,7 @@ describe('/api/posts/:post_id', () => {
         .get('/api/posts/1')
         .expect(200)
         .then(({ body: { post } }) => {
-          expect(post.comment_count).toBe('5');
+          expect(post.comment_count).toBe('20');
         });
     });
 

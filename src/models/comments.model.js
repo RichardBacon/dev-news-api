@@ -1,5 +1,8 @@
 const connection = require('../../db/connection');
 
+const { selectUserByUsername } = require('./users.model');
+const { selectPostById } = require('./posts.model');
+
 const updateCommentById = ({ comment_id }, { inc_votes }) => {
   if (inc_votes && typeof inc_votes !== 'number') {
     return Promise.reject({
@@ -79,6 +82,44 @@ const selectCommentsByPostId = (
     });
 };
 
+const insertCommentByPostId = ({ post_id }, { username, body }) => {
+  if (!username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: 'bad request',
+    });
+  }
+
+  return selectUserByUsername({ username })
+    .catch(() => {
+      return Promise.reject({
+        status: 422,
+        msg: 'user not found',
+      });
+    })
+    .then(() => {
+      return selectPostById({ post_id }).catch(() => {
+        return Promise.reject({
+          status: 422,
+          msg: 'post not found',
+        });
+      });
+    })
+    .then(() => {
+      return connection
+        .insert({
+          post_id,
+          created_by: username,
+          body,
+        })
+        .into('comments')
+        .returning('*');
+    })
+    .then((comments) => {
+      return comments[0];
+    });
+};
+
 const countComments = ({ post_id }) => {
   return connection
     .count('comment_id AS total_count')
@@ -95,5 +136,6 @@ module.exports = {
   updateCommentById,
   delCommentById,
   selectCommentsByPostId,
+  insertCommentByPostId,
   countComments,
 };

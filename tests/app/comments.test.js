@@ -352,4 +352,78 @@ describe('/api/posts/:post_id/comments', () => {
       });
     });
   });
+
+  describe('POST comment', () => {
+    describe('valid POST comment request body', () => {
+      test('status:201 - comment object', () => {
+        return request(app)
+          .post('/api/posts/1/comments')
+          .send({
+            body: 'testbody',
+            username: 'username1',
+          })
+          .expect(201)
+          .then(({ body: { comment } }) => {
+            expect(comment).toContainEntries([
+              ['comment_id', 36],
+              ['body', 'testbody'],
+              ['created_by', 'username1'],
+              ['votes', 0],
+            ]);
+            expect(new Date(comment.created_at)).toBeValidDate();
+          });
+      });
+    });
+
+    describe('invalid POST comment request body', () => {
+      test('missing key | status:400 - msg: "bad request"', () => {
+        const invalidReqBodies = [
+          {
+            body: 'testbody',
+          },
+          {
+            username: 'username1',
+          },
+        ];
+
+        const requests = invalidReqBodies.map((invalidReqBody) => {
+          return request(app)
+            .post('/api/posts/1/comments')
+            .send(invalidReqBody)
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('bad request');
+            });
+        });
+
+        return Promise.all(requests);
+      });
+
+      test('invalid request - non-existent username | status:422 - msg: "user not found"', () => {
+        return request(app)
+          .post('/api/posts/1/comments')
+          .send({
+            body: 'testbody',
+            username: 'non-existent-username',
+          })
+          .expect(422)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('user not found');
+          });
+      });
+
+      test('invalid request - non-existent post | status:422 - msg: "post not found"', () => {
+        return request(app)
+          .post('/api/posts/9999/comments')
+          .send({
+            body: 'testbody',
+            username: 'username1',
+          })
+          .expect(422)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('post not found');
+          });
+      });
+    });
+  });
 });
