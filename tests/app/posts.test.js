@@ -539,4 +539,35 @@ describe('/api/posts/:post_id', () => {
       });
     });
   });
+
+  describe('DELETE', () => {
+    test('valid delete request | status:204', () => {
+      return request(app)
+        .delete('/api/posts/1')
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+
+    describe('invalid DELETE post request', () => {
+      test('non-existent post_id | status:404 - msg: "post not found"', () => {
+        return request(app)
+          .delete('/api/posts/99999')
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('post not found');
+          });
+      });
+
+      test('invalid post_id | status:400 - msg: "bad request"', () => {
+        return request(app)
+          .delete('/api/posts/notANumber')
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('bad request');
+          });
+      });
+    });
+  });
 });

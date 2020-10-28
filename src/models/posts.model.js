@@ -158,10 +158,22 @@ const updatePostById = ({ post_id }, { inc_votes }) => {
     });
 };
 
+const delPostById = ({ post_id }) => {
+  return connection('posts')
+    .del()
+    .where('post_id', post_id)
+    .then((deletionCount) => {
+      if (deletionCount === 0) {
+        return Promise.reject({ status: 404, msg: 'post not found' });
+      }
+    });
+};
+
 module.exports = {
   selectPosts,
   countPosts,
   insertPost,
   selectPostById,
   updatePostById,
+  delPostById,
 };
