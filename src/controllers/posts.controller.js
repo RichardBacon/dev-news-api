@@ -2,6 +2,7 @@ const {
   selectPosts,
   countPosts,
   insertPost,
+  selectPostById,
 } = require('../models/posts.model');
 
 const { selectUserByUsername } = require('../models/users.model');
@@ -34,7 +35,16 @@ const postPost = (req, res, next) => {
     .catch(next);
 };
 
+const getPostById = (req, res, next) => {
+  selectPostById(req.params)
+    .then((post) => {
+      res.status(200).send({ post });
+    })
+    .catch(next);
+};
+
 module.exports = {
   getPosts,
   postPost,
+  getPostById,
 };

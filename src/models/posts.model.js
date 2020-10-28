@@ -106,8 +106,37 @@ const insertPost = ({ username, title, body, topic }) => {
     });
 };
 
+const selectPostById = ({ post_id }) => {
+  return connection
+    .select(
+      'posts.post_id',
+      'posts.title',
+      'posts.body',
+      'posts.votes',
+      'posts.created_by',
+      'posts.created_at',
+      'posts.topic'
+    )
+    .count('comments.comment_id AS comment_count')
+    .from('posts')
+    .leftJoin('comments', 'posts.post_id', 'comments.post_id')
+    .where('posts.post_id', post_id)
+    .groupBy('posts.post_id')
+    .then((posts) => {
+      if (posts.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: 'post not found',
+        });
+      }
+
+      return posts[0];
+    });
+};
+
 module.exports = {
   selectPosts,
   countPosts,
   insertPost,
+  selectPostById,
 };
