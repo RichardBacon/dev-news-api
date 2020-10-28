@@ -24,6 +24,18 @@ const updateCommentById = ({ comment_id }, { inc_votes }) => {
     });
 };
 
+const delCommentById = ({ comment_id }) => {
+  return connection('comments')
+    .del()
+    .where('comment_id', comment_id)
+    .then((deletionCount) => {
+      if (deletionCount === 0) {
+        return Promise.reject({ status: 404, msg: 'comment not found' });
+      }
+    });
+};
+
 module.exports = {
   updateCommentById,
+  delCommentById,
 };

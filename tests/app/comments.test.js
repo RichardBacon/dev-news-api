@@ -132,4 +132,35 @@ describe('/api/comments/:comment_id', () => {
       });
     });
   });
+
+  describe('DELETE', () => {
+    test('valid delete request | status:204', () => {
+      return request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+
+    describe('invalid DELETE comment request', () => {
+      test('non-existent comment_id | status:404 - msg: "comment not found"', () => {
+        return request(app)
+          .delete('/api/comments/99999')
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('comment not found');
+          });
+      });
+
+      test('invalid comment_id | status:400 - msg: "bad request"', () => {
+        return request(app)
+          .delete('/api/comments/notANumber')
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('bad request');
+          });
+      });
+    });
+  });
 });
