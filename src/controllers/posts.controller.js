@@ -4,6 +4,7 @@ const {
   insertPost,
   selectPostById,
   updatePostById,
+  delPostById,
 } = require('../models/posts.model');
 
 const { selectUserByUsername } = require('../models/users.model');
@@ -52,9 +53,18 @@ const patchPostById = (req, res, next) => {
     .catch(next);
 };
 
+const deletePostById = (req, res, next) => {
+  delPostById(req.params)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch(next);
+};
+
 module.exports = {
   getPosts,
   postPost,
   getPostById,
   patchPostById,
+  deletePostById,
 };

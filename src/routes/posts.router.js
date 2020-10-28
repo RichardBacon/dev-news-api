@@ -6,6 +6,7 @@ const {
   postPost,
   getPostById,
   patchPostById,
+  deletePostById,
 } = require('../controllers/posts.controller');
 
 const postsRouter = express.Router();
@@ -16,6 +17,7 @@ postsRouter
   .route('/:post_id')
   .get(getPostById)
   .patch(patchPostById)
+  .delete(deletePostById)
   .all(send405);
 
 module.exports = { postsRouter };
