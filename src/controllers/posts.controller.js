@@ -3,6 +3,7 @@ const {
   countPosts,
   insertPost,
   selectPostById,
+  updatePostById,
 } = require('../models/posts.model');
 
 const { selectUserByUsername } = require('../models/users.model');
@@ -43,8 +44,17 @@ const getPostById = (req, res, next) => {
     .catch(next);
 };
 
+const patchPostById = (req, res, next) => {
+  updatePostById(req.params, req.body)
+    .then((post) => {
+      res.status(200).send({ post });
+    })
+    .catch(next);
+};
+
 module.exports = {
   getPosts,
   postPost,
   getPostById,
+  patchPostById,
 };
