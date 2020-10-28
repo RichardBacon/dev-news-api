@@ -61,23 +61,6 @@ const selectCommentsByPostId = (
     .limit(limit)
     .offset(page * limit - limit)
     .then((comments) => {
-      if (comments.length === 0) {
-        return connection
-          .select('post_id')
-          .from('posts')
-          .where('post_id', post_id)
-          .then((posts) => {
-            if (posts.length === 0) {
-              return Promise.reject({
-                status: 404,
-                msg: 'no comments found',
-              });
-            }
-
-            return [];
-          });
-      }
-
       return comments;
     });
 };
@@ -91,19 +74,8 @@ const insertCommentByPostId = ({ post_id }, { username, body }) => {
   }
 
   return selectUserByUsername({ username })
-    .catch(() => {
-      return Promise.reject({
-        status: 422,
-        msg: 'user not found',
-      });
-    })
     .then(() => {
-      return selectPostById({ post_id }).catch(() => {
-        return Promise.reject({
-          status: 422,
-          msg: 'post not found',
-        });
-      });
+      return selectPostById({ post_id });
     })
     .then(() => {
       return connection
@@ -117,6 +89,12 @@ const insertCommentByPostId = ({ post_id }, { username, body }) => {
     })
     .then((comments) => {
       return comments[0];
+    })
+    .catch((err) => {
+      return Promise.reject({
+        status: 422,
+        msg: err.msg,
+      });
     });
 };
 
