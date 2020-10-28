@@ -362,3 +362,67 @@ describe('/api/posts', () => {
     });
   });
 });
+
+describe('/api/posts/:post_id', () => {
+  test('invalid methods | status:405 - msg: "method not allowed"', () => {
+    const invalidMethods = ['post', 'put'];
+    const requests = invalidMethods.map((method) => {
+      return request(app)
+        [method]('/api/posts/1')
+        .expect(405)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('method not allowed');
+        });
+    });
+
+    return Promise.all(requests);
+  });
+
+  describe('GET', () => {
+    test('valid request | status:200 | post object', () => {
+      return request(app)
+        .get('/api/posts/1')
+        .expect(200)
+        .then(({ body: { post } }) => {
+          expect(post).toContainEntries([
+            ['post_id', 1],
+            ['title', 'post1'],
+            ['created_by', 'username1'],
+            [
+              'body',
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
+            ],
+            ['topic', 'topic1'],
+            ['votes', 0],
+          ]);
+        });
+    });
+
+    test('comment_count property - total number of comments per post', () => {
+      return request(app)
+        .get('/api/posts/1')
+        .expect(200)
+        .then(({ body: { post } }) => {
+          expect(post.comment_count).toBe('5');
+        });
+    });
+
+    test('invalid request - non-existent post_id | status:404 - msg: "post not found"', () => {
+      return request(app)
+        .get('/api/posts/99999')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('post not found');
+        });
+    });
+
+    test('invalid request - invalid post_id | status:400 - msg: "bad request"', () => {
+      return request(app)
+        .get('/api/posts/notANumber')
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('bad request');
+        });
+    });
+  });
+});
