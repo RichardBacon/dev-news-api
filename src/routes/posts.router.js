@@ -9,6 +9,8 @@ const {
   deletePostById,
 } = require('../controllers/posts.controller');
 
+const { getCommentsByPostId } = require('../controllers/comments.controller');
+
 const postsRouter = express.Router();
 
 postsRouter.route('/').get(getPosts).post(postPost).all(send405);
@@ -19,5 +21,7 @@ postsRouter
   .patch(patchPostById)
   .delete(deletePostById)
   .all(send405);
+
+postsRouter.route('/:post_id/comments').get(getCommentsByPostId).all(send405);
 
 module.exports = { postsRouter };
