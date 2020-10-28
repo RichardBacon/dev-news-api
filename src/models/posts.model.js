@@ -134,9 +134,34 @@ const selectPostById = ({ post_id }) => {
     });
 };
 
+const updatePostById = ({ post_id }, { inc_votes }) => {
+  if (inc_votes && typeof inc_votes !== 'number') {
+    return Promise.reject({
+      status: 400,
+      msg: 'bad request',
+    });
+  }
+
+  return connection('posts')
+    .increment('votes', inc_votes || 0)
+    .where('post_id', post_id)
+    .returning(['*'])
+    .then((posts) => {
+      if (posts.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: 'post not found',
+        });
+      }
+
+      return posts[0];
+    });
+};
+
 module.exports = {
   selectPosts,
   countPosts,
   insertPost,
   selectPostById,
+  updatePostById,
 };

@@ -425,4 +425,118 @@ describe('/api/posts/:post_id', () => {
         });
     });
   });
+
+  describe('PATCH', () => {
+    describe('valid PATCH post request', () => {
+      test('status:200 - post object', () => {
+        return request(app)
+          .patch('/api/posts/1')
+          .send({
+            inc_votes: 1,
+          })
+          .expect(200)
+          .then(({ body: { post } }) => {
+            expect(post).toContainEntries([
+              ['post_id', 1],
+              ['title', 'post1'],
+              ['created_by', 'username1'],
+              [
+                'body',
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
+              ],
+              ['topic', 'topic1'],
+              ['votes', 1],
+            ]);
+          });
+      });
+
+      test('only inc_votes key can be updated', () => {
+        return request(app)
+          .patch('/api/posts/1')
+          .send({
+            inc_votes: 1,
+            created_by: 'new-author',
+            title: 'new-title',
+            post_id: 999,
+            body: 'new-body',
+            created_at: new Date(Date.now()).toISOString(),
+            votes: 999,
+          })
+          .expect(200)
+          .then(({ body: { post } }) => {
+            expect(post).toContainEntries([
+              ['post_id', 1],
+              ['title', 'post1'],
+              ['created_by', 'username1'],
+              [
+                'body',
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
+              ],
+              ['topic', 'topic1'],
+              ['votes', 1],
+            ]);
+          });
+      });
+
+      test('missing inc_votes key | status:200 - unchanged post object', () => {
+        return request(app)
+          .patch('/api/posts/1')
+          .send({
+            inc_vote: 1,
+          })
+          .expect(200)
+          .then(({ body: { post } }) => {
+            expect(post).toContainEntries([
+              ['post_id', 1],
+              ['title', 'post1'],
+              ['created_by', 'username1'],
+              [
+                'body',
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
+              ],
+              ['topic', 'topic1'],
+              ['votes', 0],
+            ]);
+          });
+      });
+    });
+
+    describe('invalid PATCH post request', () => {
+      test('non-existent post_id | status:404 - msg: "post not found"', () => {
+        return request(app)
+          .patch('/api/posts/99999')
+          .send({
+            inc_votes: 1,
+          })
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('post not found');
+          });
+      });
+
+      test('invalid post_id | status:400 - msg: "bad request"', () => {
+        return request(app)
+          .patch('/api/posts/notANumber')
+          .send({
+            inc_votes: 1,
+          })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('bad request');
+          });
+      });
+
+      test('invalid inc_votes property  | status:400 - msg: "bad request"', () => {
+        return request(app)
+          .patch('/api/posts/1')
+          .send({
+            inc_votes: '123alphanumeric123',
+          })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('bad request');
+          });
+      });
+    });
+  });
 });
