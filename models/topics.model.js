@@ -53,8 +53,20 @@ const insertTopic = ({ title, description, username }) => {
     });
 };
 
+const delTopicByTitle = ({ title }) => {
+  return connection('topics')
+    .del()
+    .where('title', title)
+    .then((deletionCount) => {
+      if (deletionCount === 0) {
+        return Promise.reject({ status: 404, msg: 'topic not found' });
+      }
+    });
+};
+
 module.exports = {
   selectTopics,
   selectTopicByTitle,
   insertTopic,
+  delTopicByTitle,
 };
