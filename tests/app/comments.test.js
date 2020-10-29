@@ -216,6 +216,15 @@ describe('/api/posts/:post_id/comments', () => {
         });
     });
 
+    test('invalid request - non-existent post | status:404 - msg: "post not found"', () => {
+      return request(app)
+        .get('/api/posts/9999/comments')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('post not found');
+        });
+    });
+
     describe('GET comments - queries', () => {
       describe('sort_by query', () => {
         test('valid sort_by query | status:200 - sorted by [sort_by]', () => {
@@ -354,7 +363,7 @@ describe('/api/posts/:post_id/comments', () => {
   });
 
   describe('POST comment', () => {
-    describe('valid POST comment request body', () => {
+    describe('valid POST comment request', () => {
       test('status:201 - comment object', () => {
         return request(app)
           .post('/api/posts/1/comments')
@@ -375,7 +384,7 @@ describe('/api/posts/:post_id/comments', () => {
       });
     });
 
-    describe('invalid POST comment request body', () => {
+    describe('invalid POST comment request', () => {
       test('missing key | status:400 - msg: "bad request"', () => {
         const invalidReqBodies = [
           {

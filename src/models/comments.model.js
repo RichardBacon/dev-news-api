@@ -53,16 +53,18 @@ const selectCommentsByPostId = (
     });
   }
 
-  return connection
-    .select('*')
-    .from('comments')
-    .where('post_id', post_id)
-    .orderBy(sort_by, order)
-    .limit(limit)
-    .offset(page * limit - limit)
-    .then((comments) => {
-      return comments;
-    });
+  return selectPostById({ post_id }).then(() => {
+    return connection
+      .select('*')
+      .from('comments')
+      .where('post_id', post_id)
+      .orderBy(sort_by, order)
+      .limit(limit)
+      .offset(page * limit - limit)
+      .then((comments) => {
+        return comments;
+      });
+  });
 };
 
 const insertCommentByPostId = ({ post_id }, { username, body }) => {
