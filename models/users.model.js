@@ -45,8 +45,20 @@ const selectUserByUsername = ({ username }) => {
     });
 };
 
+const delUserByUsername = ({ username }) => {
+  return connection('users')
+    .del()
+    .where('username', username)
+    .then((deletionCount) => {
+      if (deletionCount === 0) {
+        return Promise.reject({ status: 404, msg: 'user not found' });
+      }
+    });
+};
+
 module.exports = {
   selectUsers,
   insertUser,
   selectUserByUsername,
+  delUserByUsername,
 };

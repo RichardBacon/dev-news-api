@@ -46,6 +46,10 @@
       }
     }
   },
+  "DELETE /api/users/:username": {
+    "description": "deletes a user",
+    "queries": []
+  },
   "GET /api/topics": {
     "description": "serves an array of topics",
     "queries": [],
@@ -116,7 +120,7 @@
     }
   },
   "GET /api/posts/:post_id": {
-    "description": "serves an post",
+    "description": "serves a post",
     "queries": [],
     "example response": {
       "post": {
@@ -132,7 +136,7 @@
     }
   },
   "PATCH /api/posts/:post_id": {
-    "description": "updates an post",
+    "description": "updates a post",
     "queries": [],
     "example request": { "inc_votes": 1 },
     "example response": {
@@ -149,7 +153,7 @@
     }
   },
   "DELETE /api/posts/:post_id": {
-    "description": "deletes an post",
+    "description": "deletes a post",
     "queries": []
   },
   "GET /api/posts/:post_id/comments": {
