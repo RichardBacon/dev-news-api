@@ -4,10 +4,16 @@ const { usersRouter } = require('./users.router');
 const { topicsRouter } = require('./topics.router');
 const { postsRouter } = require('./posts.router');
 const { commentsRouter } = require('./comments.router');
+const endpoints = require('../endpoints.json');
 
 const apiRouter = express.Router();
 
-apiRouter.route('/').all(send405);
+apiRouter
+  .route('/')
+  .get((req, res, next) => {
+    res.status(200).send(endpoints);
+  })
+  .all(send405);
 
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/topics', topicsRouter);

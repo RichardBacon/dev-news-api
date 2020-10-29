@@ -1,0 +1,206 @@
+{
+  "GET /api": {
+    "description": "serves a description of the available endpoints on the api"
+  },
+  "GET /api/users": {
+    "description": "serves an array of users",
+    "queries": [],
+    "example response": {
+      "users": [
+        {
+          "username": "username",
+          "first_name": "first_name",
+          "last_name": "last_name",
+          "email": "email@email.com"
+        }
+      ]
+    }
+  },
+  "POST /api/users": {
+    "description": "adds a user",
+    "queries": [],
+    "example request": {
+      "username": "username",
+      "first_name": "first_name",
+      "last_name": "last_name",
+      "email": "email@email.com"
+    },
+    "example response": {
+      "user": {
+        "username": "username",
+        "first_name": "first_name",
+        "last_name": "last_name",
+        "email": "email@email.com"
+      }
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves a user",
+    "queries": [],
+    "example response": {
+      "user": {
+        "username": "username",
+        "first_name": "first_name",
+        "last_name": "last_name",
+        "email": "email@email.com"
+      }
+    }
+  },
+  "GET /api/topics": {
+    "description": "serves an array of topics",
+    "queries": [],
+    "example response": {
+      "topics": [
+        {
+          "title": "title of topic",
+          "description": "description of topic",
+          "created_at": "2020-10-23T15:57:07.169Z",
+          "created_by": "username"
+        }
+      ]
+    }
+  },
+  "POST /api/topics": {
+    "description": "adds a topic",
+    "queries": [],
+    "example request": {
+      "title": "title of topic",
+      "description": "description of topic",
+      "username": "username"
+    },
+    "example response": {
+      "topic": {
+        "title": "title of topic",
+        "description": "description of topic",
+        "username": "username"
+      }
+    }
+  },
+  "GET /api/posts": {
+    "description": "serves an array of posts, total count of posts",
+    "queries": ["sort_by", "order", "created_by", "topic", "limit", "page"],
+    "example response": {
+      "posts": [
+        {
+          "post_id": 5,
+          "title": "title of post",
+          "votes": 12,
+          "created_at": "2020-10-23T16:03:15.253Z",
+          "created_by": "username",
+          "topic": "topic of post",
+          "comment_count": 3
+        }
+      ],
+      "total_count": "1"
+    }
+  },
+  "POST /api/posts": {
+    "description": "adds a post",
+    "queries": [],
+    "example request": {
+      "username": "username",
+      "topic": "topic of post",
+      "title": "title of post",
+      "body": "body of post"
+    },
+    "example response": {
+      "post": {
+        "post_id": 6,
+        "title": "title of post",
+        "created_by": "username",
+        "topic": "topic of post",
+        "body": "body of post",
+        "created_at": "2020-10-29T09:32:00.745Z",
+        "votes": 0
+      }
+    }
+  },
+  "GET /api/posts/:post_id": {
+    "description": "serves an post",
+    "queries": [],
+    "example response": {
+      "post": {
+        "post_id": 5,
+        "title": "title of post",
+        "body": "body of post",
+        "votes": 12,
+        "created_by": "username",
+        "created_at": "2020-10-23T15:59:23.835Z",
+        "topic": "topic of post",
+        "comment_count": 3
+      }
+    }
+  },
+  "PATCH /api/posts/:post_id": {
+    "description": "updates an post",
+    "queries": [],
+    "example request": { "inc_votes": 1 },
+    "example response": {
+      "post": {
+        "post_id": 5,
+        "title": "title of post",
+        "body": "body of post",
+        "votes": 13,
+        "created_by": "username",
+        "created_at": "2020-10-23T15:59:23.835Z",
+        "topic": "topic of post",
+        "comment_count": 3
+      }
+    }
+  },
+  "DELETE /api/posts/:post_id": {
+    "description": "deletes an post",
+    "queries": []
+  },
+  "GET /api/posts/:post_id/comments": {
+    "description": "serves an array of comments, total count of comments",
+    "queries": ["sort_by", "order", "limit", "page"],
+    "example response": {
+      "comments": [
+        {
+          "comment_id": 15,
+          "body": "body of comment",
+          "votes": 12,
+          "created_by": "username",
+          "created_at": "2020-10-23T16:03:15.254Z",
+          "post_id": 1
+        }
+      ],
+      "total_count": "1"
+    }
+  },
+  "POST /api/posts/:post_id/comments": {
+    "description": "adds a comment",
+    "queries": [],
+    "example request": { "username": "username", "body": "body of comment" },
+    "example response": {
+      "comment": {
+        "comment_id": 15,
+        "body": "body of comment",
+        "votes": 0,
+        "created_at": "2020-10-23T16:03:15.254Z",
+        "created_by": "username",
+        "post_id": 2
+      }
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "updates a comment",
+    "queries": [],
+    "example request": { "inc_votes": 1 },
+    "example response": {
+      "comment": {
+        "comment_id": 15,
+        "body": "body of comment",
+        "votes": 14,
+        "created_at": "2020-10-23T16:03:15.254Z",
+        "created_by": "username",
+        "post_id": 1
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a comment",
+    "queries": []
+  }
+}
