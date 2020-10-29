@@ -1,4 +1,4 @@
-const connection = require('../../db/connection');
+const connection = require('../db/connection');
 
 const { selectUserByUsername } = require('./users.model');
 

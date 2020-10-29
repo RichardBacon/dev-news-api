@@ -1,21 +1,33 @@
 {
   "name": "dev-news-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "dev-news-api",
   "main": "index.js",
   "scripts": {
+    "start": "node listen.js",
     "test": "jest --watch -i",
-    "dev-server": "nodemon src/listen.js",
+    "dev-server": "nodemon listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
+    "migrate-latest:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest",
+    "migrate-rollback:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback",
     "seed:test": "NODE_ENV=test knex seed:run",
-    "seed:dev": "knex seed:run"
+    "seed:dev": "knex seed:run",
+    "seed:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex seed:run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richardjonbacon/dev-news-api.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Richard Bacon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/richardjonbacon/dev-news-api/issues"
+  },
+  "homepage": "https://github.com/richardjonbacon/dev-news-api#readme",
   "devDependencies": {
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.14.0",
