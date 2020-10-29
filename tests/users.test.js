@@ -120,7 +120,7 @@ describe('/api/users', () => {
 
 describe('/api/users/:username', () => {
   test('invalid methods | status:405 - msg: "method not allowed"', () => {
-    const invalidMethods = ['post', 'patch', 'put', 'delete'];
+    const invalidMethods = ['post', 'patch', 'put'];
     const requests = invalidMethods.map((method) => {
       return request(app)
         [method]('/api/users/username')
@@ -151,6 +151,26 @@ describe('/api/users/:username', () => {
     test('invalid request - non-existent username | status:404 - msg: "user not found"', () => {
       return request(app)
         .get('/api/users/non_existent')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('user not found');
+        });
+    });
+  });
+
+  describe('DELETE user by username', () => {
+    test('valid delete request | status:204', () => {
+      return request(app)
+        .delete('/api/users/username1')
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+
+    test('non-existent username | status:404 - msg: "user not found"', () => {
+      return request(app)
+        .delete('/api/users/username99999')
         .expect(404)
         .then(({ body: { msg } }) => {
           expect(msg).toBe('user not found');
