@@ -1,4 +1,8 @@
-const { selectTopics, insertTopic } = require('../models/topics.model');
+const {
+  selectTopics,
+  insertTopic,
+  delTopicByTitle,
+} = require('../models/topics.model');
 
 const getTopics = (req, res, next) => {
   selectTopics()
@@ -16,7 +20,16 @@ const postTopic = (req, res, next) => {
     .catch(next);
 };
 
+const deleteTopicByTitle = (req, res, next) => {
+  delTopicByTitle(req.params)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch(next);
+};
+
 module.exports = {
   getTopics,
   postTopic,
+  deleteTopicByTitle,
 };

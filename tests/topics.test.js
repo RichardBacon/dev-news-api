@@ -107,3 +107,39 @@ describe('/api/topics', () => {
     });
   });
 });
+
+describe('/api/topics/:title', () => {
+  test('invalid methods | status:405 - msg: "method not allowed"', () => {
+    const invalidMethods = ['get', 'post', 'patch', 'put'];
+    const requests = invalidMethods.map((method) => {
+      return request(app)
+        [method]('/api/topics/topic')
+        .expect(405)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('method not allowed');
+        });
+    });
+
+    return Promise.all(requests);
+  });
+
+  describe('DELETE topic by topic', () => {
+    test('valid delete request | status:204', () => {
+      return request(app)
+        .delete('/api/topics/topic1')
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+
+    test('non-existent topic | status:404 - msg: "topic not found"', () => {
+      return request(app)
+        .delete('/api/topics/topic99999')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('topic not found');
+        });
+    });
+  });
+});

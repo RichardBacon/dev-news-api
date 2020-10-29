@@ -80,6 +80,10 @@
       }
     }
   },
+  "DELETE /api/topics/:title": {
+    "description": "deletes a topic",
+    "queries": []
+  },
   "GET /api/posts": {
     "description": "serves an array of posts, total count of posts",
     "queries": ["sort_by", "order", "created_by", "topic", "limit", "page"],
