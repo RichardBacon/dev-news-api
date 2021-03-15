@@ -26,7 +26,7 @@ const selectPosts = ({
     .select(
       'posts.post_id',
       'posts.title',
-      'posts.votes',
+      'posts.likes',
       'posts.created_at',
       'posts.created_by',
       'posts.topic'
@@ -107,7 +107,7 @@ const selectPostById = ({ post_id }) => {
       'posts.post_id',
       'posts.title',
       'posts.body',
-      'posts.votes',
+      'posts.likes',
       'posts.created_by',
       'posts.created_at',
       'posts.topic'
@@ -129,8 +129,8 @@ const selectPostById = ({ post_id }) => {
     });
 };
 
-const updatePostById = ({ post_id }, { inc_votes }) => {
-  if (inc_votes && typeof inc_votes !== 'number') {
+const updatePostById = ({ post_id }, { inc_likes }) => {
+  if (inc_likes && typeof inc_likes !== 'number') {
     return Promise.reject({
       status: 400,
       msg: 'bad request',
@@ -138,7 +138,7 @@ const updatePostById = ({ post_id }, { inc_votes }) => {
   }
 
   return connection('posts')
-    .increment('votes', inc_votes || 0)
+    .increment('likes', inc_likes || 0)
     .where('post_id', post_id)
     .returning(['*'])
     .then((posts) => {

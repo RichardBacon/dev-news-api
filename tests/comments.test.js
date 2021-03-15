@@ -28,7 +28,7 @@ describe('/api/comments/:comment_id', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
           })
           .expect(200)
           .then(({ body: { comment } }) => {
@@ -40,22 +40,22 @@ describe('/api/comments/:comment_id', () => {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo.',
               ],
               ['post_id', 1],
-              ['votes', 1],
+              ['likes', 1],
             ]);
           });
       });
 
-      test('only inc_votes key can be updated', () => {
+      test('only inc_likes key can be updated', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
             created_by: 'new-author',
             post_id: 999,
             comment_id: 999,
             body: 'new-body',
             created_at: new Date(Date.now()).toISOString(),
-            votes: 999,
+            likes: 999,
           })
           .expect(200)
           .then(({ body: { comment } }) => {
@@ -67,16 +67,16 @@ describe('/api/comments/:comment_id', () => {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo.',
               ],
               ['post_id', 1],
-              ['votes', 1],
+              ['likes', 1],
             ]);
           });
       });
 
-      test('missing inc_votes key | status:200 - unchanged comment object', () => {
+      test('missing inc_likes key | status:200 - unchanged comment object', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({
-            inc_vote: 1,
+            inc_like: 1,
           })
           .expect(200)
           .then(({ body: { comment } }) => {
@@ -88,7 +88,7 @@ describe('/api/comments/:comment_id', () => {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo.',
               ],
               ['post_id', 1],
-              ['votes', 0],
+              ['likes', 0],
             ]);
           });
       });
@@ -99,7 +99,7 @@ describe('/api/comments/:comment_id', () => {
         return request(app)
           .patch('/api/comments/99999')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
           })
           .expect(404)
           .then(({ body: { msg } }) => {
@@ -111,7 +111,7 @@ describe('/api/comments/:comment_id', () => {
         return request(app)
           .patch('/api/comments/notANumber')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
           })
           .expect(400)
           .then(({ body: { msg } }) => {
@@ -119,11 +119,11 @@ describe('/api/comments/:comment_id', () => {
           });
       });
 
-      test('invalid inc_votes property  | status:400 - msg: "bad request"', () => {
+      test('invalid inc_likes property  | status:400 - msg: "bad request"', () => {
         return request(app)
           .patch('/api/comments/1')
           .send({
-            inc_votes: '123alphanumeric123',
+            inc_likes: '123alphanumeric123',
           })
           .expect(400)
           .then(({ body: { msg } }) => {
@@ -189,7 +189,7 @@ describe('/api/posts/:post_id/comments', () => {
             expect(comment).toContainAllKeys([
               'comment_id',
               'post_id',
-              'votes',
+              'likes',
               'created_at',
               'created_by',
               'body',
@@ -231,7 +231,7 @@ describe('/api/posts/:post_id/comments', () => {
           const validSortByQueries = [
             'comment_id',
             'post_id',
-            'votes',
+            'likes',
             'created_at',
             'created_by',
             'body',
@@ -377,7 +377,7 @@ describe('/api/posts/:post_id/comments', () => {
               ['comment_id', 36],
               ['body', 'testbody'],
               ['created_by', 'username1'],
-              ['votes', 0],
+              ['likes', 0],
             ]);
             expect(new Date(comment.created_at)).toBeValidDate();
           });

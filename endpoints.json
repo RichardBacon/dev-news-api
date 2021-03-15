@@ -92,7 +92,7 @@
         {
           "post_id": 5,
           "title": "title of post",
-          "votes": 12,
+          "likes": 12,
           "created_at": "2020-10-23T16:03:15.253Z",
           "created_by": "username",
           "topic": "topic of post",
@@ -119,7 +119,7 @@
         "topic": "topic of post",
         "body": "body of post",
         "created_at": "2020-10-29T09:32:00.745Z",
-        "votes": 0
+        "likes": 0
       }
     }
   },
@@ -131,7 +131,7 @@
         "post_id": 5,
         "title": "title of post",
         "body": "body of post",
-        "votes": 12,
+        "likes": 12,
         "created_by": "username",
         "created_at": "2020-10-23T15:59:23.835Z",
         "topic": "topic of post",
@@ -142,13 +142,13 @@
   "PATCH /api/posts/:post_id": {
     "description": "updates a post",
     "queries": [],
-    "example request": { "inc_votes": 1 },
+    "example request": { "inc_likes": 1 },
     "example response": {
       "post": {
         "post_id": 5,
         "title": "title of post",
         "body": "body of post",
-        "votes": 13,
+        "likes": 13,
         "created_by": "username",
         "created_at": "2020-10-23T15:59:23.835Z",
         "topic": "topic of post",
@@ -168,7 +168,7 @@
         {
           "comment_id": 15,
           "body": "body of comment",
-          "votes": 12,
+          "likes": 12,
           "created_by": "username",
           "created_at": "2020-10-23T16:03:15.254Z",
           "post_id": 1
@@ -185,7 +185,7 @@
       "comment": {
         "comment_id": 15,
         "body": "body of comment",
-        "votes": 0,
+        "likes": 0,
         "created_at": "2020-10-23T16:03:15.254Z",
         "created_by": "username",
         "post_id": 2
@@ -195,12 +195,12 @@
   "PATCH /api/comments/:comment_id": {
     "description": "updates a comment",
     "queries": [],
-    "example request": { "inc_votes": 1 },
+    "example request": { "inc_likes": 1 },
     "example response": {
       "comment": {
         "comment_id": 15,
         "body": "body of comment",
-        "votes": 14,
+        "likes": 14,
         "created_at": "2020-10-23T16:03:15.254Z",
         "created_by": "username",
         "post_id": 1

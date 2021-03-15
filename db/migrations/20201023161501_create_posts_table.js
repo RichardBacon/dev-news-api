@@ -3,7 +3,7 @@ exports.up = function (knex) {
     postsTable.increments('post_id');
     postsTable.string('title').notNullable();
     postsTable.text('body').notNullable();
-    postsTable.integer('votes').defaultTo(0).notNullable();
+    postsTable.integer('likes').defaultTo(0).notNullable();
     postsTable.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
     postsTable
       .string('created_by')

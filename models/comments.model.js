@@ -3,8 +3,8 @@ const connection = require('../db/connection');
 const { selectUserByUsername } = require('./users.model');
 const { selectPostById } = require('./posts.model');
 
-const updateCommentById = ({ comment_id }, { inc_votes }) => {
-  if (inc_votes && typeof inc_votes !== 'number') {
+const updateCommentById = ({ comment_id }, { inc_likes }) => {
+  if (inc_likes && typeof inc_likes !== 'number') {
     return Promise.reject({
       status: 400,
       msg: 'bad request',
@@ -12,7 +12,7 @@ const updateCommentById = ({ comment_id }, { inc_votes }) => {
   }
 
   return connection('comments')
-    .increment('votes', inc_votes || 0)
+    .increment('likes', inc_likes || 0)
     .where('comment_id', comment_id)
     .returning('*')
     .then((comments) => {

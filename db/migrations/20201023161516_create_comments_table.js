@@ -2,7 +2,7 @@ exports.up = function (knex) {
   return knex.schema.createTable('comments', (commentsTable) => {
     commentsTable.increments('comment_id');
     commentsTable.text('body').notNullable();
-    commentsTable.integer('votes').defaultTo(0).notNullable();
+    commentsTable.integer('likes').defaultTo(0).notNullable();
     commentsTable
       .timestamp('created_at')
       .defaultTo(knex.fn.now())

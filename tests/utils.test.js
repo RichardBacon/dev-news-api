@@ -10,7 +10,7 @@ describe('formatDates', () => {
           author: 'author1',
           body: 'body1',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
       ];
       const formattedData = formatDates(data, 'created_at');
@@ -28,7 +28,7 @@ describe('formatDates', () => {
           author: 'author1',
           body: 'body1',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title2',
@@ -36,7 +36,7 @@ describe('formatDates', () => {
           author: 'author2',
           body: 'body2',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title3',
@@ -44,7 +44,7 @@ describe('formatDates', () => {
           author: 'author3',
           body: 'body3',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
       ];
       const formattedData = formatDates(data, 'created_at');
@@ -61,21 +61,21 @@ describe('formatDates', () => {
           topic: 'topic1',
           author: 'author1',
           body: 'body1',
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title2',
           topic: 'topic2',
           author: 'author2',
           body: 'body2',
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title3',
           topic: 'topic3',
           author: 'author3',
           body: 'body3',
-          votes: 0,
+          likes: 0,
         },
       ];
       const formattedData = formatDates(data, 'created_at');
@@ -86,21 +86,21 @@ describe('formatDates', () => {
           topic: 'topic1',
           author: 'author1',
           body: 'body1',
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title2',
           topic: 'topic2',
           author: 'author2',
           body: 'body2',
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title3',
           topic: 'topic3',
           author: 'author3',
           body: 'body3',
-          votes: 0,
+          likes: 0,
         },
       ]);
     });
@@ -115,7 +115,7 @@ describe('formatDates', () => {
           author: 'author1',
           body: 'body1',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title2',
@@ -123,7 +123,7 @@ describe('formatDates', () => {
           author: 'author2',
           body: 'body2',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title3',
@@ -131,7 +131,7 @@ describe('formatDates', () => {
           author: 'author3',
           body: 'body3',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
       ];
 
@@ -144,7 +144,7 @@ describe('formatDates', () => {
           author: 'author1',
           body: 'body1',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title2',
@@ -152,7 +152,7 @@ describe('formatDates', () => {
           author: 'author2',
           body: 'body2',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title3',
@@ -160,7 +160,7 @@ describe('formatDates', () => {
           author: 'author3',
           body: 'body3',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
       ]);
     });
@@ -173,7 +173,7 @@ describe('formatDates', () => {
           author: 'author1',
           body: 'body1',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title2',
@@ -181,7 +181,7 @@ describe('formatDates', () => {
           author: 'author2',
           body: 'body2',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
         {
           title: 'title3',
@@ -189,7 +189,7 @@ describe('formatDates', () => {
           author: 'author3',
           body: 'body3',
           created_at: 1603475177570,
-          votes: 0,
+          likes: 0,
         },
       ];
 

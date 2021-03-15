@@ -31,7 +31,7 @@ describe('/api/posts', () => {
             expect(post).toContainAllKeys([
               'post_id',
               'title',
-              'votes',
+              'likes',
               'comment_count',
               'created_at',
               'created_by',
@@ -74,7 +74,7 @@ describe('/api/posts', () => {
           const validSortByQueries = [
             'post_id',
             'title',
-            'votes',
+            'likes',
             'created_at',
             'created_by',
             'topic',
@@ -284,7 +284,7 @@ describe('/api/posts', () => {
               ['title', 'testtitle'],
               ['body', 'testbody'],
               ['created_by', 'username1'],
-              ['votes', 0],
+              ['likes', 0],
               ['topic', 'topic1'],
             ]);
             expect(new Date(post.created_at)).toBeValidDate();
@@ -393,7 +393,7 @@ describe('/api/posts/:post_id', () => {
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
             ],
             ['topic', 'topic1'],
-            ['votes', 0],
+            ['likes', 0],
           ]);
         });
     });
@@ -432,7 +432,7 @@ describe('/api/posts/:post_id', () => {
         return request(app)
           .patch('/api/posts/1')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
           })
           .expect(200)
           .then(({ body: { post } }) => {
@@ -445,22 +445,22 @@ describe('/api/posts/:post_id', () => {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
               ],
               ['topic', 'topic1'],
-              ['votes', 1],
+              ['likes', 1],
             ]);
           });
       });
 
-      test('only inc_votes key can be updated', () => {
+      test('only inc_likes key can be updated', () => {
         return request(app)
           .patch('/api/posts/1')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
             created_by: 'new-author',
             title: 'new-title',
             post_id: 999,
             body: 'new-body',
             created_at: new Date(Date.now()).toISOString(),
-            votes: 999,
+            likes: 999,
           })
           .expect(200)
           .then(({ body: { post } }) => {
@@ -473,16 +473,16 @@ describe('/api/posts/:post_id', () => {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
               ],
               ['topic', 'topic1'],
-              ['votes', 1],
+              ['likes', 1],
             ]);
           });
       });
 
-      test('missing inc_votes key | status:200 - unchanged post object', () => {
+      test('missing inc_likes key | status:200 - unchanged post object', () => {
         return request(app)
           .patch('/api/posts/1')
           .send({
-            inc_vote: 1,
+            inc_like: 1,
           })
           .expect(200)
           .then(({ body: { post } }) => {
@@ -495,7 +495,7 @@ describe('/api/posts/:post_id', () => {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante et libero vehicula iaculis non a leo. Praesent et massa metus. Morbi ultrices porta est, at gravida risus porttitor non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc id blandit metus.',
               ],
               ['topic', 'topic1'],
-              ['votes', 0],
+              ['likes', 0],
             ]);
           });
       });
@@ -506,7 +506,7 @@ describe('/api/posts/:post_id', () => {
         return request(app)
           .patch('/api/posts/99999')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
           })
           .expect(404)
           .then(({ body: { msg } }) => {
@@ -518,7 +518,7 @@ describe('/api/posts/:post_id', () => {
         return request(app)
           .patch('/api/posts/notANumber')
           .send({
-            inc_votes: 1,
+            inc_likes: 1,
           })
           .expect(400)
           .then(({ body: { msg } }) => {
@@ -526,11 +526,11 @@ describe('/api/posts/:post_id', () => {
           });
       });
 
-      test('invalid inc_votes property  | status:400 - msg: "bad request"', () => {
+      test('invalid inc_likes property  | status:400 - msg: "bad request"', () => {
         return request(app)
           .patch('/api/posts/1')
           .send({
-            inc_votes: '123alphanumeric123',
+            inc_likes: '123alphanumeric123',
           })
           .expect(400)
           .then(({ body: { msg } }) => {
