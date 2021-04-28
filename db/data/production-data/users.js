@@ -17,4 +17,10 @@ module.exports = [
     last_name: 'Hughes',
     email: 'pete.hughes@gmail.com',
   },
+  {
+    username: 'FrameworkFan',
+    first_name: 'Jane',
+    last_name: 'Doe',
+    email: 'jane.doe@gmail.com',
+  },
 ];

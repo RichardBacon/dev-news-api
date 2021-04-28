@@ -1,38 +1,26 @@
 module.exports = [
   {
-    title: 'JavaScript',
-    description: 'All things JavaScript',
-    created_at: 1603468627169,
-    created_by: 'TopCoder',
-  },
-  {
     title: 'HTML',
     description: 'All things HTML',
-    created_at: 1603468627169,
+    created_at: 1600100000000,
     created_by: 'TopCoder',
   },
   {
     title: 'CSS',
     description: 'All things CSS',
-    created_at: 1603468627169,
+    created_at: 1600200000000,
     created_by: 'StyleKing',
+  },
+  {
+    title: 'JavaScript',
+    description: 'All things JavaScript',
+    created_at: 1600300000000,
+    created_by: 'DevGuy',
   },
   {
     title: 'React',
     description: 'All things React',
-    created_at: 1603468627169,
-    created_by: 'TopCoder',
-  },
-  {
-    title: 'Gatsby',
-    description: 'All things Gatsby',
-    created_at: 1603468627169,
-    created_by: 'TopCoder',
-  },
-  {
-    title: 'Vue',
-    description: 'All things Vue',
-    created_at: 1603468627169,
-    created_by: 'StyleKing',
+    created_at: 1600400000000,
+    created_by: 'DevGuy',
   },
 ];
