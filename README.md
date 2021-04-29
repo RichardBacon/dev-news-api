@@ -10,6 +10,22 @@ The repo for the frontend web app can be found here: [Dev News](https://github.c
 
 An API to serve a mock news and discussion site for developers, inspired by [Reddit](https://www.reddit.com/) and [DEV Community](https://dev.to/).
 
+## Development
+
+### Technical Features
+
+- A backend RESTful API built on Node with Express, using an MVC architecture.
+
+- CRUD operations performed on a PostgreSQL database using Knex.
+
+#### Dev Tools
+
+- Code formatting with Prettier.
+
+- Linting with ESLint.
+
+- Test-driven development with Jest and Supertest.
+
 ## Getting Started
 
 ```bash
